@@ -3,5 +3,6 @@
   "belacoder_path": "/home/nvidia/belacoder/",
   "srtla_path": "/home/nvidia/srtla/",
   "bitrate_file": "/tmp/belacoder_br",
-  "ips_file": "/tmp/srtla_ips"
+  "ips_file": "/tmp/srtla_ips",
+  "enable_local_recording": true
 }

@@ -77,6 +77,11 @@ if (setup.srtla_path) {
   srtlaSendExec = "/usr/bin/srtla_send";
 }
 
+let enableLocalRecording = false;
+if (setup.enable_local_recording) {
+  enableLocalRecording = true;
+}
+
 function checkExecPath(path) {
   try {
     fs.accessSync(path, fs.constants.R_OK);
@@ -3002,6 +3007,22 @@ function start(conn, params) {
         notificationBroadcast('belacoder', 'error', msg, duration = 5, isPersistent = true, isDismissable = false);
       }
     });
+
+    if (enableLocalRecording) {
+      spawnStreamingLoop(belacoderExec, belacoderArgs, 2000, function(err) {
+        let msg;
+        if (err.match('gstreamer error from alsasrc0')) {
+          msg = 'Local recording capture card error (audio). Trying to restart...';
+        } else if (err.match('gstreamer error from v4l2src0')) {
+          msg = 'Local recording capture card error (video). Trying to restart...';
+        } else if (err.match('Pipeline stall detected')) {
+          msg = 'Local recording input source has stalled. Trying to restart...';
+        }
+        if (msg) {
+          notificationBroadcast('belacoder', 'error', msg, duration = 5, isPersistent = true, isDismissable = false);
+        }
+      })
+    }
   });
 }
 
