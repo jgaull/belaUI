@@ -58,7 +58,14 @@ process.env['LANGUAGE'] = 'C';
 process.env['DEBIAN_FRONTEND'] = 'noninteractive';
 
 /* Read the config and setup files */
-const setup = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+let setup;
+try {
+  setup = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+} catch (err) {
+  console.log(`Failed to open the setup file: ${err.message}`);
+  process.exit(1);
+}
+
 console.log(setup);
 
 let belacoderExec, belacoderPipelinesDir;
