@@ -3026,19 +3026,22 @@ function start(conn, params) {
           '-d', config.delay,
           '-b', setup.bitrate_file,
           '-l', config.srt_latency,
-        ], 2000, function(err) {
-        let msg;
-        if (err.match('gstreamer error from alsasrc0')) {
-          msg = 'Local recording capture card error (audio). Trying to restart...';
-        } else if (err.match('gstreamer error from v4l2src0')) {
-          msg = 'Local recording capture card error (video). Trying to restart...';
-        } else if (err.match('Pipeline stall detected')) {
-          msg = 'Local recording input source has stalled. Trying to restart...';
+        ], 
+        2000, 
+        function(err) {
+          let msg;
+          if (err.match('gstreamer error from alsasrc0')) {
+            msg = 'Local recording capture card error (audio). Trying to restart...';
+          } else if (err.match('gstreamer error from v4l2src0')) {
+            msg = 'Local recording capture card error (video). Trying to restart...';
+          } else if (err.match('Pipeline stall detected')) {
+            msg = 'Local recording input source has stalled. Trying to restart...';
+          }
+          if (msg) {
+            notificationBroadcast('belacoder', 'error', msg, duration = 5, isPersistent = true, isDismissable = false);
+          }
         }
-        if (msg) {
-          notificationBroadcast('belacoder', 'error', msg, duration = 5, isPersistent = true, isDismissable = false);
-        }
-      })
+      )
     }
   });
 }
