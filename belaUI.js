@@ -84,9 +84,9 @@ if (setup.srtla_path) {
   srtlaSendExec = "/usr/bin/srtla_send";
 }
 
-let enableLocalRecording = false;
-if (setup.enable_local_recording) {
-  enableLocalRecording = true;
+let localRecordingPipeline;
+if (setup.local_recording_pipeline) {
+  localRecordingPipeline = setup.local_recording_pipeline;
 }
 
 function checkExecPath(path) {
@@ -2978,7 +2978,7 @@ function start(conn, params) {
         notificationBroadcast('srtla', 'error', msg, duration = 5, isPersistent = true, isDismissable = false);
       }
     });
-
+    console.log(`Starting stream with pipeline: ${pipeline}`);
     const belacoderArgs = [
                             pipeline,
                             '127.0.0.1',
@@ -3015,8 +3015,17 @@ function start(conn, params) {
       }
     });
 
-    if (enableLocalRecording) {
-      spawnStreamingLoop(belacoderExec, belacoderArgs, 2000, function(err) {
+    if (localRecordingPipeline) {
+      spawnStreamingLoop(
+        belacoderExec, 
+        [
+          localRecordingPipeline,
+          '127.0.0.1',
+          '9000',
+          '-d', config.delay,
+          '-b', setup.bitrate_file,
+          '-l', config.srt_latency,
+        ], 2000, function(err) {
         let msg;
         if (err.match('gstreamer error from alsasrc0')) {
           msg = 'Local recording capture card error (audio). Trying to restart...';
