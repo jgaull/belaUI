@@ -4,5 +4,5 @@
   "srtla_path": "/home/nvidia/srtla/",
   "bitrate_file": "/tmp/belacoder_br",
   "ips_file": "/tmp/srtla_ips",
-  "local_recording_pipeline": "custom/h265_camlink_1080p_local_only"
+  "local_recording_pipeline": "/usr/share/belacoder/pipelines/custom/h265_camlink_1080p_local_only"
 }
