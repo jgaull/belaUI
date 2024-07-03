@@ -87,6 +87,7 @@ if (setup.srtla_path) {
 let localRecordingPipeline;
 if (setup.local_recording_pipeline) {
   localRecordingPipeline = setup.local_recording_pipeline;
+  console.log(`Using local recording pipeline: ${localRecordingPipeline}`);
 }
 
 function checkExecPath(path) {
